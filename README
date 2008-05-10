@@ -27,9 +27,9 @@ In an association:
 Provides paginated iterators for collections that can iterate safely over huge datasets, and can iterate while
 performing destructive actions on the records in the collection.
 
-Entry.each_by_page(:order => 'created_at DESC') do |entry|
-  entry.update_attributes(:created_at => Time.now)
-end
+  Entry.each_by_page(:order => 'created_at DESC') do |entry|
+    entry.update_attributes(:created_at => Time.now)
+  end
 
 Also includes a fancy page links generator with some interesting options.
 Call pagination_links and pass options to tune the output
