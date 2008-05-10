@@ -1,0 +1,24 @@
+<%-
+
+# Requires locals
+# pages: array of integers, or :ellipse
+# current_page: element of pages array
+# options: hash of options for link_to
+
+-%>
+<ul class="pagination">
+  <li class="first"><%= link_to_unless(current_page == 1, "&laquo;&nbsp;Prev", options.merge(page_param => current_page - 1)) %></li>
+  <% for page in pages do
+    case page
+      when Fixnum
+        if (page == current_page)
+        %><li class="current"><%= page %></li><%
+        else
+        %><li><%= link_to page, options.merge( page_param => page ) %></li><%
+        end
+      when :ellipse
+        %><li>&hellip;</li><%
+      end
+    end -%>
+  <li><%= link_to_unless(pages.empty? || current_page == pages[-1], "Next&nbsp;&raquo;", options.merge(page_param => current_page + 1)) %></li>
+</ul>

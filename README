@@ -1,0 +1,37 @@
+Extends a model or association with pagination capabilities. In addition to using the conventional
+finders, model pagination allows you to return pages at a time, as well as the number of pages the
+model or association has.
+
+In a model:
+  class Entry < ActiveRecord::Base; end
+
+  Entry.page(1)                     # Return the first page of Entries.
+  Entry.page(1,                     
+    :order => 'created_at DESC')    # Return the first page with an explicit order.
+  Entry.per_page = 15               # Set the number of results to be returned per-page with the pagination methods
+  Entry.page_count                  # Return the number of pages in the collection
+  Entry.page_for_entry              # Return the page number a given entry number would be on
+                                       For example, Entry.page_for_entry(21) returns 2
+
+Chains nicely with named_scopes:
+  Entry.by('created_at DESC').page(1)
+
+In an association:
+  class Workspace < ActiveRecord::Base
+    has_many :entries,
+      :order  => 'created_at DESC'
+  end
+
+  Workspace.find(1).entries.page(1)          # Returns the first 20 entries for the first workspace.
+
+Also includes a fancy page links generator with some interesting options.
+Call pagination_links and pass options to tune the output
+  :page_param => The param modified for each page link, indicating what page in the collection the link is to.
+  :partial => the partial file name to render out the pagination links, default is 'shared/pagination_links
+  :min_leading_pages => This many pages will always show up at the beginning of the pagination links, defaults to 3
+  :min_trailing_pages => This many pages will always show up at the end of the pagination links, defaults to 3
+  :range_about_current_page => This many pages will always show up to the left or right of the current page, defaults to 3
+  :num_pages => number of pages; will look in @num_pages if this is not passed in
+  :skip_params => array of param names to strip out of params so they won't show up in the url
+
+Copy views/_pagination_links.html.erb to app/views/shared, or hack the plugin to point wherever.
