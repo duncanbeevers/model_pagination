@@ -66,11 +66,9 @@ module ModelPagination  # :nodoc:
       # Returns the requested page, applying the provided options.
       #   workspace.entries.page 1
       #   workspace.entries.page 1, :order => 'created_at ASC'
-      def page num, options = {}
-        num = [ num.to_i, 1 ].max
-
-        find :all, page_options(num, options)
-      end
+      named_scope :page, (Proc.new do |num, options|
+        page_options [ num.to_i, 1 ].max, options
+      end)
 
       # Step through and instantiate each member of the class and execute on it,
       #   but instantiate no more than per_page instances at any given time.
